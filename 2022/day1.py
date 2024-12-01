@@ -3,7 +3,7 @@ from heapq import heappop, heappush
 def part1():
     ans = 0
     calories = 0
-    with open('input1.txt', 'r') as f:
+    with open('input01.txt', 'r') as f:
         for line in f:
             if line != "\n":
                 calories += int(line)
@@ -15,7 +15,7 @@ def part1():
 def part2():
     most_calories = []
     calories = 0
-    with open('input1.txt', 'r') as f:
+    with open('input01.txt', 'r') as f:
         for line in f:
             if line != "\n":
                 calories += int(line)

@@ -5,7 +5,7 @@ win = {'r': 's', 's': 'p', 'p': 'r'}
 
 def part1():
     ans = 0
-    with open('input2.txt', 'r') as f:
+    with open('input02.txt', 'r') as f:
         for line in f:
             op, me = line.split()
             op, me = mp[op], mp[me]
@@ -18,7 +18,7 @@ def part1():
 
 def part2():
     ans = 0
-    with open('input2.txt', 'r') as f:
+    with open('input02.txt', 'r') as f:
         for line in f:
             op, strategy = line.split()
             if strategy == 'X': # Lose

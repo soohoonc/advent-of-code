@@ -2,7 +2,7 @@
 def part1():
     ans = 0
     x, y = 0, 0
-    with open('input2.txt', 'r') as f:
+    with open('input02.txt', 'r') as f:
         for line in f:
             instruction, value = line.split()
             if instruction == 'forward':
@@ -17,7 +17,7 @@ def part1():
 def part2():
     ans = 0
     x, y, aim = 0, 0, 0
-    with open('input2.txt', 'r') as f:
+    with open('input02.txt', 'r') as f:
         for line in f:
             instruction, value = line.split()
             if instruction == 'forward':
