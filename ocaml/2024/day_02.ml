@@ -1,4 +1,5 @@
 (* @see: https://adventofcode.com/2024/day/2 *)
+
 let parse input =
   let lines =
     input
@@ -78,3 +79,8 @@ let solve_part_two input =
         | [] | _ -> failwith "Invalid Report")
   in
   loop 0 list
+
+  let solve input = 
+    let solution1 = solve_part_one input
+    and solution2 = solve_part_two input in
+    Printf.sprintf "Solution 1: %d\nSolution 2: %d\n" solution1 solution2

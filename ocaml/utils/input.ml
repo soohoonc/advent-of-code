@@ -1,7 +1,12 @@
 open Core
 open Async
 
-let get_input ~year ~day ~session =
+let get_input ~year ~day =
+  let session =
+      Dotenv.export ~path:"../.env" ();
+      Sys.getenv "AOC_SESSION"
+      |> Option.value_exn ~message:"AOC_SESSION not found in environment or .env file"
+  in
   let url =
     Printf.sprintf "https://adventofcode.com/%d/day/%d/input" year day
   in

@@ -50,3 +50,8 @@ let solve_part_two input =
       | None -> acc
       | Some count -> acc + (num * count))
     0 list1
+
+  let solve input = 
+    let solution1 = solve_part_one input
+    and solution2 = solve_part_two input in
+    Printf.sprintf "Solution 1: %d\nSolution 2: %d\n" solution1 solution2
