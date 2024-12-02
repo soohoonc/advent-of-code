@@ -1,11 +1,8 @@
-use dotenv::dotenv;
-use std::env;
+use aoc::get_input;
 
-mod day_one;
-mod input;
-
-use crate::day_one::solve_part_one;
-use crate::input::get_input;
+fn solve_part_one(input: String) {
+    println!("{}", &input[..10]);
+}
 
 async fn solve() {
     let session = env::var("AOC_SESSION").expect("AOC_SESSION must be defined!");
