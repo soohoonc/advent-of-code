@@ -25,7 +25,6 @@ let solve_part_one input =
   let list1, list2 = parse input in
   let rec get_diff acc lists =
     match lists with
-    | [], [] -> acc
     | h1 :: t1, h2 :: t2 -> get_diff (acc + abs (h1 - h2)) (t1, t2)
     | _ -> acc
   in
@@ -38,10 +37,9 @@ let solve_part_two input =
   let counter =
     List.fold_left
       (fun acc num ->
-        IntMap.(
-          update num
-            (function None -> Some 1 | Some count -> Some (count + 1))
-            acc))
+        IntMap.update num
+          (function None -> Some 1 | Some count -> Some (count + 1))
+          acc)
       IntMap.empty list2
   in
   List.fold_left
@@ -51,7 +49,6 @@ let solve_part_two input =
       | Some count -> acc + (num * count))
     0 list1
 
-  let solve input = 
-    let solution1 = solve_part_one input
-    and solution2 = solve_part_two input in
-    Printf.sprintf "Solution 1: %d\nSolution 2: %d\n" solution1 solution2
+let solve input =
+  let solution1 = solve_part_one input and solution2 = solve_part_two input in
+  Printf.sprintf "Solution 1: %d\nSolution 2: %d\n" solution1 solution2

@@ -131,3 +131,4 @@ _build
 .env
 .env.*
 !.env.example
+input/*
