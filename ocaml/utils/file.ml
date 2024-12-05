@@ -14,7 +14,7 @@ let get_solution ~year ~day =
           | 2 -> Day_02.solve
           | 3 -> Day_03.solve
           | 4 -> Day_04.solve
-          (* | 5 -> Day_05.solve *)
+          | 5 -> Day_05.solve
           | _ when day <= 25 ->
               failwith
                 (Printf.sprintf "Day %d not implemented for year %d" day year)
