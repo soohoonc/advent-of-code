@@ -13,6 +13,17 @@
 ; (license LICENSE)
 ; (documentation https://url/to/documentation)
 
+(source
+ (github soohoonc/advent-of-code))
+
+(authors "Soohoon Choi")
+
+(maintainers "Soohoon Choi")
+
+(license MIT)
+
+(documentation "https://github.com/soohoonc/advent-of-code")
+
 (package
  (name aoc)
  (synopsis "Advent of Code")
