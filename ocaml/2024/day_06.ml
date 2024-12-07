@@ -47,7 +47,6 @@ let solve_part_one input =
   in
   traverse x y 0 PairMap.empty
 
-(* in other words count the number of paths at a 90 deg clockwise rotation to the current path*)
 let solve_part_two input =
   let input = parse input in
   let start_x, start_y = find_guard 0 0 input in
@@ -69,7 +68,7 @@ let solve_part_two input =
     in
     traverse start_x start_y 0 PairMap.empty
   in
-  (* fucking hell *)
+  (* fucking hell just try blocking each *)
   PairMap.fold
     (fun (x, y) _ acc ->
       let rec follow_path curr_x curr_y dir_idx seen =
