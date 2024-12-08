@@ -28,7 +28,7 @@ let parse input =
     |> List.fold_left
          (fun (coords, map) (x, y, c) ->
            let existing = CharMap.find_opt c map |> Option.value ~default:[] in
-           (coords @ [ (x, y, c) ], CharMap.add c ((x, y) :: existing) map))
+           ((x, y, c) :: coords, CharMap.add c ((x, y) :: existing) map))
          ([], CharMap.empty)
   in
   (m, n, coords, antenna)
