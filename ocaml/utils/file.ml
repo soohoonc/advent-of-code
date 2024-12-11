@@ -6,24 +6,25 @@ end
 
 let get_solution ~year ~day =
   try
-    let solution_function =
+    if day <= 0 || day > 25 then Error "Day must be between 1 and 25"
+    else
       match year with
       | 2024 -> (
           match day with
-          | 1 -> Day_01.solve
-          | 2 -> Day_02.solve
-          | 3 -> Day_03.solve
-          | 4 -> Day_04.solve
-          | 5 -> Day_05.solve
-          | 6 -> Day_06.solve
-          | 7 -> Day_07.solve
-          | 8 -> Day_08.solve
-          | _ when day <= 25 ->
-              failwith
-                (Printf.sprintf "Day %d not implemented for year %d" day year)
-          | _ -> failwith "Day must be between 1 and 25")
-      | _ -> failwith (Printf.sprintf "Year %d not implemented" year)
-    in
-    Ok solution_function
-  with _ ->
-    Error (Printf.sprintf "Solution not found for year %d day %d" year day)
+          | 1 -> Ok Day_01.solve
+          | 2 -> Ok Day_02.solve
+          | 3 -> Ok Day_03.solve
+          | 4 -> Ok Day_04.solve
+          | 5 -> Ok Day_05.solve
+          | 6 -> Ok Day_06.solve
+          | 7 -> Ok Day_07.solve
+          | 8 -> Ok Day_08.solve
+          | 9 -> Ok Day_09.solve
+          | 10 -> Ok Day_10.solve
+          | _ ->
+              Error
+                (Printf.sprintf "Solution not found for year %d day %d" year day)
+          )
+      | _ -> Error (Printf.sprintf "No solutions for year: %d" year)
+  with e ->
+    Error (Printf.sprintf "Error loading solution: %s" (Printexc.to_string e))

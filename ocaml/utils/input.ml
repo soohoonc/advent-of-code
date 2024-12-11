@@ -1,7 +1,6 @@
 open Core
 open Async
 
-(* TODO: Implement caching *)
 let get_input ~year ~day =
   let input_file_name = Core.Printf.sprintf "./%d/inputs/%02d.txt" year day in
   match Core.In_channel.read_all input_file_name with

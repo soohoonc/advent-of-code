@@ -18,8 +18,6 @@ let command =
   in
   Command.async ~summary:"Start Advent of Code Solution"
     (Command.Param.map2 year_param day_param ~f:(fun year day () ->
-         run ~year ~day >>= fun result ->
-         print_endline result;
-         return ()))
+         run ~year ~day >>| print_endline))
 
 let () = Command_unix.run command
