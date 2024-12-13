@@ -16,11 +16,6 @@ let solve_part_one input =
   let input = parse input in
   let length = Core.String.length input in
   let rec compute_checksum idx i j r_left f_left acc =
-    (* print_endline
-       (Printf.sprintf
-          "compute_checksum idx: %d, i: %d, j: %d, r_left: %d, f_left: %d, acc: \
-           %d"
-          idx i j r_left f_left acc); *)
     if i >= j then
       acc
       +
@@ -63,50 +58,24 @@ let solve_part_one input =
 
 module IntMap = Map.Make (Int)
 
-let solve_part_two _ = 0
-(* let solve_part_two input =
-   let input = parse input in
-   let length = Core.String.length input in
-   let rec compute_checksum idx i j seen acc =
-     (* print_endline
-        (Printf.sprintf
-           "compute_checksum idx: %d, i: %d, j: %d, r_left: %d, f_left: %d, acc: \
-            %d"
-           idx i j r_left f_left acc); *)
-     if
-     else if f_left = 0 then
-       let i = if i mod 2 = 0 then i else i + 1 in
-       let id = i / 2 in
-       let new_acc, new_idx =
-         let files =
-           int_of_string (Core.String.make 1 (Core.String.get input i))
-         in
-         let a = get_incremental_checksum id idx (idx + files) 0 in
-         (acc + a, idx + files)
-       in
-       let free_space =
-         int_of_string (Core.String.make 1 (Core.String.get input (i + 1)))
-       in
-       compute_checksum new_idx (i + 1) j r_left free_space new_acc
-     else
-       let id = j / 2 in
-       let new_acc, new_idx, new_i, new_j, new_r_left, new_f_left =
-         if f_left >= r_left then
-           let next_r_left =
-             int_of_string (Core.String.make 1 (Core.String.get input (j - 2)))
-           in
-           let a = get_incremental_checksum id idx (idx + r_left) 0 in
-           (acc + a, idx + r_left, i, j - 2, next_r_left, f_left - r_left)
-         else
-           let a = get_incremental_checksum id idx (idx + f_left) 0 in
-           (acc + a, idx + f_left, i + 1, j, r_left - f_left, 0)
-       in
-       compute_checksum new_idx new_i new_j new_r_left new_f_left new_acc
-   in
+let solve_part_two input =
+  let compress disk =
+    let l = Core.String.length disk - 1 in
+    let id = l / 2 in
+    let rec loop i = match i with 
+      | i when i * 2 >= id -> ()
+      | _ -> 
 
-   compute_checksum 0 0 (length - 1)
-     (int_of_string (Core.String.make 1 (Core.String.get input (length - 1))))
-     0 0 *)
+    scan 0 (Core.String.length disk - 1) []
+  in
+  let rec checksum acc = function
+    | [] -> acc
+    | h :: t ->
+        checksum
+          (acc + get_incremental_checksum (fst h) (fst (snd h)) (snd (snd h)) 0)
+          t
+  in
+  parse input |> compress |> checksum
 
 let solve input =
   (* let solve _ = *)
