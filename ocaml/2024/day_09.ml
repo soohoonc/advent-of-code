@@ -5,12 +5,7 @@ let parse input = String.trim input
 let rec partial_checksum id start_idx end_idx acc =
   match (start_idx, end_idx) with
   | s, e when s >= e -> acc
-  | _ ->
-      (* print_endline
-         (Printf.sprintf "Adding to checksum id: %d, val: %d" start_idx
-            (id * start_idx)); *)
-      partial_checksum id (start_idx + 1) end_idx
-        (acc + (id * start_idx))
+  | _ -> partial_checksum id (start_idx + 1) end_idx (acc + (id * start_idx))
 
 let solve_part_one input =
   let input = parse input in
@@ -19,8 +14,7 @@ let solve_part_one input =
     if i >= j then
       acc
       +
-      if i = j && r_left > 0 then
-        partial_checksum (i / 2) idx (idx + r_left) 0
+      if i = j && r_left > 0 then partial_checksum (i / 2) idx (idx + r_left) 0
       else 0
     else if f_left = 0 then
       let i = if i mod 2 = 0 then i else i + 1 in
@@ -60,36 +54,46 @@ module IntMap = Map.Make (Int)
 
 let solve_part_two input =
   let compress disk =
-    let taken_map = IntMap.empty in
-    let l = Core.String.length disk - 1 in
-    let move id = 
-      let rec loop id i = match i with 
-        | i when i >= id -> (id, (start_idx, end_idx))
-        | i -> let taken = IntMap.(find_opt i taken_map) |> Option.value ~default:0 in
-            let free_space = int_of_string (Core.String.get i disk) in
-            if free_space - taken >= id_length then IntMap.(add i (taken + id_length) taken_map); (id, (start_idx, end_idx))
-            else loop id (i + 2) 
-          in 
-          loop id 1
+    let taken_map = ref IntMap.empty in
+    let move id =
+      let id_length =
+        int_of_string (Core.String.make 1 (Core.String.get disk (id * 2)))
+      in
+      let rec loop id start_idx i =
+        match i with
+        | i when i = id * 2 -> (id, (start_idx, start_idx + id_length))
+        | i ->
+            let taken =
+              IntMap.(find_opt i !taken_map) |> Option.value ~default:0
+            in
+            let slots =
+              int_of_string (Core.String.make 1 (Core.String.get disk i))
+            in
+            if i mod 2 = 1 && slots - taken >= id_length then
+              let () =
+                taken_map := IntMap.(add i (taken + id_length) !taken_map)
+              in
+              (id, (start_idx + taken, start_idx + taken + id_length))
+            else loop id (start_idx + slots) (i + 1)
+      in
+      loop id 0 0
     in
-    let rec scan id acc = match id with
+    let rec scan id acc =
+      match id with
       | id when id < 0 -> acc
-      | id -> scan (id - 1) ((move id) :: acc)
+      | id -> scan (id - 1) (move id :: acc)
     in
-    scan (l/2) []
+    scan (Core.String.length disk / 2) []
   in
   let rec checksum acc = function
     | [] -> acc
     | h :: t ->
         checksum
-          (acc + partial_checksum (fst h) (fst (snd h)) (snd (snd h)) 0) (* id start end acc *)
+          (acc + partial_checksum (fst h) (fst (snd h)) (snd (snd h)) 0)
           t
   in
-  parse input |> compress |> checksum
+  parse input |> compress |> checksum 0
 
 let solve input =
-  (* let solve _ = *)
-  (* let input = "12345" in *)
-  (* let input = "2333133121414131402" in *)
   let solution1 = solve_part_one input and solution2 = solve_part_two input in
   Printf.sprintf "Solution 1: %d\nSolution 2: %d\n" solution1 solution2
