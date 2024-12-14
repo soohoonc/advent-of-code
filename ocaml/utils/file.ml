@@ -22,6 +22,7 @@ let get_solution ~year ~day =
           | 9 -> Ok Day_09.solve
           | 10 -> Ok Day_10.solve
           | 11 -> Ok Day_11.solve
+          | 12 -> Ok Day_12.solve
           | 13 -> Ok Day_13.solve
           | 14 -> Ok Day_14.solve
           | _ ->
