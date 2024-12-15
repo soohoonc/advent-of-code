@@ -38,7 +38,7 @@ let solve_part_one input =
   q1 * q2 * q3 * q4
 
 (* Brute forced the pattern from some stuff i noticed while printing out *)
-(* if i mod 101 = 48 && i mod 103 = 23 CRT this shit even*)
+(* if i mod 101 = 48 && i mod 103 = 23 CRT this shit even *)
 
 module PairMap = Map.Make (struct
   type t = int * int
