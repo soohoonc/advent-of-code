@@ -101,7 +101,6 @@ let solve_part_one input =
         loop map' x' y' t
   in
   let final_map, _, _ = loop map start_x start_y action in
-  List.iter (fun line -> Printf.printf "%s\n" line) final_map;
   sum_coords final_map
 
 let mutate_map map =
@@ -127,28 +126,53 @@ let solve_part_two input =
     let moveable map start_x start_y dx dy =
       let rec scan x y =
         match Core.String.get (List.nth map x) y with
-        | '#' -> None
-        | '.' -> Some (x, y)
-        | '[' | ']' ->
-            scan (x + dx) (y + dy) (* TODO calculate whole size of cluster *)
+        | '#' -> false
+        | '.' -> true
+        | '[' ->
+            if not (dx = 0) then
+              scan (x + dx) (y + dy) && scan (x + dx) (y + 1 + dy)
+            else scan (x + dx) (y + dy)
+        | ']' ->
+            if not (dx = 0) then
+              scan (x + dx) (y + dy) && scan (x + dx) (y - 1 + dy)
+            else scan (x + dx) (y + dy)
         | l ->
             failwith
-              (Printf.sprintf
-                 "Unrecognized Character %c: Finding Next Free Slot" l)
+              (Printf.sprintf "Unrecognized Character %c: Checking Movablity" l)
       in
       scan start_x start_y
     in
-    (* TODO move the entire cluster s*)
-    let shift map start_x start_y dx dy = () in
+    let shift map start_x start_y dx dy =
+      let rec shift_boxes map x y =
+        match Core.String.get (List.nth map x) y with
+        | '.' -> swap map (x, y) (x - dx, y - dy)
+        | '[' ->
+            let map' =
+              if not (dx = 0) then
+                let map' = shift_boxes map (x + dx) (y + dy) in
+                shift_boxes map' (x + dx) (y + dy + 1)
+              else shift_boxes map (x + dx) (y + dy)
+            in
+            swap map' (x, y) (x - dx, y - dy)
+        | ']' ->
+            let map' =
+              if not (dx = 0) then
+                let map' = shift_boxes map (x + dx) (y + dy) in
+                shift_boxes map' (x + dx) (y + dy - 1)
+              else shift_boxes map (x + dx) (y + dy)
+            in
+            swap map' (x, y) (x - dx, y - dy)
+        | l -> failwith (Printf.sprintf "Unrecognized Character %c: Shifting" l)
+      in
+      shift_boxes map start_x start_y
+    in
     match next_tile with
     | '.' -> (swap map (x, y) (x + dx, y + dy), x + dx, y + dy)
     | '#' -> (map, x, y)
-    | '[' | ']' -> (
-        match moveable map (x + dx) (y + dy) dx dy with
-        | Some _ ->
-            let map' = shift map (x + dx) (y + dy) dx dy in
-            (swap map' (x, y) (x + dx, y + dy), x + dx, y + dy)
-        | None -> (map, x, y))
+    | '[' | ']' ->
+        if moveable map (x + dx) (y + dy) dx dy then
+          (shift map (x + dx) (y + dy) dx dy, x + dx, y + dy)
+        else (map, x, y)
     | l ->
         failwith (Printf.sprintf "Unrecognized Character %c: Applying Action" l)
   in
@@ -160,8 +184,6 @@ let solve_part_two input =
         let n =
           if Core.String.get (List.nth map x) y = '[' then (x * 100) + y else 0
         in
-        (* if Core.String.get (List.nth map x) y = 'O' then
-           Printf.printf "O at (%d,%d) - score: %d\n" x y ((x * 100) + y); *)
         loop x (y + 1) (acc + n)
     in
     loop 0 0 0
@@ -171,6 +193,7 @@ let solve_part_two input =
     | [] -> (map, x, y)
     | h :: t ->
         let map', x', y' = apply_action map x y h in
+        print_newline ();
         loop map' x' y' t
   in
   let final_map, _, _ = loop map start_x start_y action in
@@ -178,40 +201,5 @@ let solve_part_two input =
   sum_coords final_map
 
 let solve input =
-  (* let solve _ = *)
-  (* let input =
-       "########\n\
-        #..O.O.#\n\
-        ##@.O..#\n\
-        #...O..#\n\
-        #.#.O..#\n\
-        #...O..#\n\
-        #......#\n\
-        ########\n\n\
-        <^^>>>vv<v>>v<<"
-     in *)
-  (* let input =
-       "##########\n\
-        #..O..O.O#\n\
-        #......O.#\n\
-        #.OO..O.O#\n\
-        #..O@..O.#\n\
-        #O#..O...#\n\
-        #O..O..O.#\n\
-        #.OO.O.OO#\n\
-        #....O...#\n\
-        ##########\n\n\
-        <vv>^<v^>v>^vv^v>v<>v^v<v<^vv<<<^><<><>>v<vvv<>^v^>^<<<><<v<<<v^vv^v>^\n\
-        vvv<<^>^v^^><<>>><>^<<><^vv^^<>vvv<>><^^v>^>vv<>v<<<<v<^v>^<^^>>>^<v<v\n\
-        ><>vv>v^v^<>><>>>><^^>vv>v<^^^>>v^v^<^^>v^^>v^<^v>v<>>v^v^<v>v^^<^^vv<\n\
-        <<v<^>>^^^^>>>v^<>vvv^><v<<<>^^^vv^<vvv>^>v<^^^^v<>^>vvvv><>>v^<<^^^^^\n\
-        ^><^><>>><>^^<<^^v>>><^<v>^<vv>>v>>>^v><>^v><<<<v>>v<v<v>vvv>^<><<>^><\n\
-        ^>><>^v<><^vvv<^^<><v<<<<<><^v<<<><<<^^<v<^^^><^>>^<v^><<<^>>^v<v^v<v^\n\
-        >^>>^v>vv>^<<^v<>><<><<v<<v><>v<^vv<<<>^^v^>^^>>><<^v>>v^v><^^>>^<>vv^\n\
-        <><^^>^^^<><vvvvv^v<v<<>^v<v>v<<^><<><<><<<^^<<<^<<>><<><^^^>^^<>^>v<>\n\
-        ^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>\n\
-        v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"
-     in *)
   let solution1 = solve_part_one input and solution2 = solve_part_two input in
-
   Printf.sprintf "Solution 1: %d\nSolution 2: %d\n" solution1 solution2
