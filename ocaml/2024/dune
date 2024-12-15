@@ -1,4 +1,4 @@
 (library
  (name y2024)
  (public_name aoc.2024)
- (libraries core async))
+ (libraries core async str))
