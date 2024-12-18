@@ -29,17 +29,13 @@ let solve_part_one input =
   loop 0;
   let dist = ref PairMap.empty in
   let rec dijkstras curr d =
-    let curr_dist =
-      PairMap.(find_opt curr !dist) |> Option.value ~default:max_int
-    in
-    if inbound curr h w && (not PairMap.(mem curr !corrupted)) && curr_dist > d
-    then (
+    let cd = PairMap.(find_opt curr !dist) |> Option.value ~default:max_int in
+    if inbound curr h w && (not PairMap.(mem curr !corrupted)) && cd > d then (
       (dist := PairMap.(add curr d !dist));
       dijkstras (fst curr + 1, snd curr) (d + 1);
       dijkstras (fst curr - 1, snd curr) (d + 1);
       dijkstras (fst curr, snd curr - 1) (d + 1);
       dijkstras (fst curr, snd curr + 1) (d + 1))
-    else ()
   in
   dijkstras (0, 0) 0;
   PairMap.(find_opt (h, w) !dist) |> Option.value ~default:max_int
@@ -61,20 +57,16 @@ let solve_part_two input =
       loop 0;
       let dist = ref PairMap.empty in
       let rec dijkstras curr d =
-        let curr_dist =
+        let cd =
           PairMap.(find_opt curr !dist) |> Option.value ~default:max_int
         in
-        if
-          inbound curr h w
-          && (not PairMap.(mem curr !corrupted))
-          && curr_dist > d
+        if inbound curr h w && (not PairMap.(mem curr !corrupted)) && cd > d
         then (
           (dist := PairMap.(add curr d !dist));
           dijkstras (fst curr + 1, snd curr) (d + 1);
           dijkstras (fst curr - 1, snd curr) (d + 1);
           dijkstras (fst curr, snd curr - 1) (d + 1);
           dijkstras (fst curr, snd curr + 1) (d + 1))
-        else ()
       in
       dijkstras (0, 0) 0;
       let d =
