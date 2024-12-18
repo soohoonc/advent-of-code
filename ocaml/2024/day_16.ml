@@ -85,7 +85,7 @@ let solve_part_two input =
   let rec backtrack curr e prev seen =
     match curr with
     | curr when curr = e -> seen
-    | _ -> (
+    | _ ->
         let score =
           PairMap.(find_opt curr !dp) |> Option.value ~default:max_int
         in
@@ -114,12 +114,9 @@ let solve_part_two input =
         in
 
         let seen' = PairMap.add curr 1 seen in
-        match valid_next with
-        | [] -> seen'
-        | _ ->
-            List.fold_left
-              (fun acc pos -> backtrack pos e score acc)
-              seen' valid_next)
+        List.fold_left
+          (fun acc pos -> backtrack pos e score acc)
+          seen' valid_next
   in
   find (fst s) (snd s) 0 1 0;
   let seen =

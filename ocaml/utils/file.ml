@@ -27,6 +27,8 @@ let get_solution ~year ~day =
           | 14 -> Ok Day_14.solve
           | 15 -> Ok Day_15.solve
           | 16 -> Ok Day_16.solve
+          | 17 -> Ok Day_17.solve
+          | 18 -> Ok Day_18.solve
           | _ ->
               Error
                 (Printf.sprintf "Solution not found for year %d day %d" year day)
