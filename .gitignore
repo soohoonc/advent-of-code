@@ -134,3 +134,4 @@ _build
 input/*
 
 **/inputs
+.DS_Store
