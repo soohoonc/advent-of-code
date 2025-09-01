@@ -1,5 +1,4 @@
 (* @see: https://adventofcode.com/2024/day/17 *)
-
 module CharMap = Map.Make (Char)
 
 let parse input =
@@ -14,16 +13,104 @@ let parse input =
         |> Core.String.split_on_chars ~on:[ ',' ]
         |> List.map int_of_string
       in
-      (regs, programs :: program)
+      (regs, programs)
     else (regs, program)
   in
   input |> Core.String.split_lines
   |> List.filter (fun s -> String.empty <> s)
   |> List.fold_left extract (registers, [])
 
-let solve_part_one _ = 0
+(*
+3 bit computer 
+register A, B, C any int
+8 opcode/instructions 
+followed by 3 bit number  as input (operand)
+
+ip starts at 0 keeps track of what instruction is on, 
+- increase by 2 each time, except jum wh it goes , if it tries to read outside bounds then halts
+
+operands
+- literal: operand it slef
+combo operand 0 - 3 -> literal
+4 - 6 -> val of A - C
+7 reserved
+
+
+0 -> divisiton reg A / (2^(combo op)), truncated to int written to A
+1 -> bitwise XOR of registre B and instruction's literal operand to B
+2 -> combo operand mod 8, to B
+3 -> nothing if A is 0 if A not zero then jumps IP to literal op
+4 -> bitwise XOR of register B and C stores in B (reads operand but ignore)
+5 -> calculates value of combo operand mod 8 and outpus that value. (if multiple comma separated)
+6 -> like 0 but stored in B
+7 -> like 0 but stored in C
+
+*)
+
+let rec run ip registers program (output : int list) =
+  (* ( let a, b, c = (CharMap.find 'A' registers), (CharMap.find 'B' registers), (CharMap.find 'C' registers) in
+    Printf.printf "Running Instruction: %d, Registers A:%d, B:%d, C:%d\n" ip a b c); *)
+  let combo v =
+    match v with
+    | 0 | 1 | 2 | 3 -> v
+    | 4 -> CharMap.find 'A' registers
+    | 5 -> CharMap.find 'B' registers
+    | 6 -> CharMap.find 'C' registers
+    | _ -> failwith "Invalid Combo"
+  in
+  if ip > List.length program - 1 then output
+  else
+    let opcode = List.nth program ip in
+    let operand = List.nth program (ip + 1) in
+    match opcode with
+    | 0 ->
+        let new_registers =
+          let a = CharMap.find 'A' registers in
+          (CharMap.add 'A' (a / Base.Int.pow 2 (combo operand))) registers
+        in
+        run (ip + 2) new_registers program output
+    | 1 ->
+        let new_registers =
+          let b = CharMap.find 'B' registers in
+          (CharMap.add 'B' (b lxor operand)) registers
+        in
+        run (ip + 2) new_registers program output
+    | 2 ->
+        let new_registers = (CharMap.add 'B' (combo operand mod 8)) registers in
+        run (ip + 2) new_registers program output
+    | 3 ->
+        let a = CharMap.find 'A' registers in
+        let new_ip = if a == 0 then ip + 2 else operand in
+        run new_ip registers program output
+    | 4 ->
+        let new_registers =
+          let b = CharMap.find 'B' registers in
+          let c = CharMap.find 'C' registers in
+          (CharMap.add 'B' (b lxor c)) registers
+        in
+        run (ip + 2) new_registers program output
+    | 5 -> run (ip + 2) registers program ((combo operand mod 8) :: output)
+    | 6 ->
+        let new_registers =
+          let a = CharMap.find 'A' registers in
+          (CharMap.add 'B' (a / Base.Int.pow 2 (combo operand))) registers
+        in
+        run (ip + 2) new_registers program output
+    | 7 ->
+        let new_registers =
+          let a = CharMap.find 'A' registers in
+          (CharMap.add 'C' (a / Base.Int.pow 2 (combo operand))) registers
+        in
+        run (ip + 2) new_registers program output
+    | _ -> failwith "Invalid opcode"
+
+let solve_part_one input =
+  let registers, program = parse input in
+  run 0 registers program [] |> List.rev |> List.map string_of_int
+  |> Core.String.concat ~sep:","
+
 let solve_part_two _ = 0
 
 let solve input =
   let solution1 = solve_part_one input and solution2 = solve_part_two input in
-  Printf.sprintf "Solution 1: %d\nSolution 2: %d\n" solution1 solution2
+  Printf.sprintf "Solution 1: %s\nSolution 2: %d\n" solution1 solution2
