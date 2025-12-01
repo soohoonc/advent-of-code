@@ -3,8 +3,8 @@ use std::env;
 use tokio;
 
 mod utils;
-#[path = "../2024/mod.rs"]
-mod y2024;
+#[path = "../2023/mod.rs"]
+mod y2023;
 
 #[tokio::main]
 async fn main() {
@@ -19,12 +19,18 @@ async fn main() {
     let input = utils::get_input(year, day).await;
 
     let result = match year {
-        2024 => match day {
+        2023 => match day {
             1 => format!(
                 "Part 1:\n{}\n\nPart 2:\n{}",
-                y2024::day_01::solve_part_one(input.clone()),
-                y2024::day_01::solve_part_two(input)
+                y2023::day_01::solve_part_one(&input),
+                y2023::day_01::solve_part_two(&input)
             ),
+            1 => format!(
+                "Part 1:\n{}\n\nPart 2:\n{}",
+                y2023::day_03::solve_part_one(&input),
+                y2023::day_03::solve_part_two(&input)
+
+            )
             _ => panic!("Day {} not implemented for year {}", day, year),
         },
         _ => panic!("Year {} not implemented", year),

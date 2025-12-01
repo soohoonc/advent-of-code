@@ -21,35 +21,32 @@ let parse input =
   |> List.fold_left extract (registers, [])
 
 (*
-3 bit computer 
-register A, B, C any int
-8 opcode/instructions 
-followed by 3 bit number  as input (operand)
+Part 1:
+- 3-bit computer 
+- registers A, B, C holding any int
+- program: [opcode1, operand1, opcode2, operand2, ...] (3-bit)
+- instruction pointer: that starts at 0, increase by 2 each time except for the jump instruction
+- when instruction pointer tries to read out of bounds -> halts and returns output
+- 2 types of operands:
+  - literal: operand as value
+  - combo: 0 - 3 -> literal | 4 - 6 -> val of registers A - C | 7 -> reserved
+- 8 opcodes
+  - 0 -> division register A / (2^(combo op)), truncated to int written to register A
+  - 1 -> bitwise XOR of register B and instruction's literal operand written to register B
+  - 2 -> combo operand mod 8 written to B
+  - 3 -> no op if A is 0 else jumps instruction pointer to literal operand
+  - 4 -> bitwise XOR of register B and C and written to register B (reads operand but ignore)
+  - 5 -> calculates value of combo operand mod 8 and outputs that value. (if multiple outputs, return as comma separated list)
+  - 6 -> like opcode 0 but written to B
+  - 7 -> like opcode 0 but written to C
 
-ip starts at 0 keeps track of what instruction is on, 
-- increase by 2 each time, except jum wh it goes , if it tries to read outside bounds then halts
-
-operands
-- literal: operand it slef
-combo operand 0 - 3 -> literal
-4 - 6 -> val of A - C
-7 reserved
-
-
-0 -> divisiton reg A / (2^(combo op)), truncated to int written to A
-1 -> bitwise XOR of registre B and instruction's literal operand to B
-2 -> combo operand mod 8, to B
-3 -> nothing if A is 0 if A not zero then jumps IP to literal op
-4 -> bitwise XOR of register B and C stores in B (reads operand but ignore)
-5 -> calculates value of combo operand mod 8 and outpus that value. (if multiple comma separated)
-6 -> like 0 but stored in B
-7 -> like 0 but stored in C
+Part 2: minimum value in register A to output the same program
 
 *)
 
 let rec run ip registers program (output : int list) =
   (* ( let a, b, c = (CharMap.find 'A' registers), (CharMap.find 'B' registers), (CharMap.find 'C' registers) in
-    Printf.printf "Running Instruction: %d, Registers A:%d, B:%d, C:%d\n" ip a b c); *)
+     Printf.printf "Running Instruction: %d, Registers A:%d, B:%d, C:%d\n" ip a b c); *)
   let combo v =
     match v with
     | 0 | 1 | 2 | 3 -> v
