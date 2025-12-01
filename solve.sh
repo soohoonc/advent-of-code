@@ -10,7 +10,7 @@ lang=${3:-$DEFAULT_LANG}
 
 if [ -z "$day" ]; then
     echo "Usage: $0 [year] day [language]"
-    echo "Example: $0 2024 1 ocaml"
+    echo "Example: $0 2025 1 ocaml"
     exit 1
 fi
 

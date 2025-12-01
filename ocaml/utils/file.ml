@@ -1,5 +1,3 @@
-open Y2024
-
 module type Day_solution = sig
   val solve : string -> string
 end
@@ -11,29 +9,36 @@ let get_solution ~year ~day =
       match year with
       | 2024 -> (
           match day with
-          | 1 -> Ok Day_01.solve
-          | 2 -> Ok Day_02.solve
-          | 3 -> Ok Day_03.solve
-          | 4 -> Ok Day_04.solve
-          | 5 -> Ok Day_05.solve
-          | 6 -> Ok Day_06.solve
-          | 7 -> Ok Day_07.solve
-          | 8 -> Ok Day_08.solve
-          | 9 -> Ok Day_09.solve
-          | 10 -> Ok Day_10.solve
-          | 11 -> Ok Day_11.solve
-          | 12 -> Ok Day_12.solve
-          | 13 -> Ok Day_13.solve
-          | 14 -> Ok Day_14.solve
-          | 15 -> Ok Day_15.solve
-          | 16 -> Ok Day_16.solve
-          | 17 -> Ok Day_17.solve
-          | 18 -> Ok Day_18.solve
-          | 19 -> Ok Day_19.solve
-          | 20 -> Ok Day_20.solve
-          | 21 -> Ok Day_21.solve
-          | 22 -> Ok Day_22.solve
-          | 23 -> Ok Day_23.solve
+          | 1 -> Ok Y2024.Day_01.solve
+          | 2 -> Ok Y2024.Day_02.solve
+          | 3 -> Ok Y2024.Day_03.solve
+          | 4 -> Ok Y2024.Day_04.solve
+          | 5 -> Ok Y2024.Day_05.solve
+          | 6 -> Ok Y2024.Day_06.solve
+          | 7 -> Ok Y2024.Day_07.solve
+          | 8 -> Ok Y2024.Day_08.solve
+          | 9 -> Ok Y2024.Day_09.solve
+          | 10 -> Ok Y2024.Day_10.solve
+          | 11 -> Ok Y2024.Day_11.solve
+          | 12 -> Ok Y2024.Day_12.solve
+          | 13 -> Ok Y2024.Day_13.solve
+          | 14 -> Ok Y2024.Day_14.solve
+          | 15 -> Ok Y2024.Day_15.solve
+          | 16 -> Ok Y2024.Day_16.solve
+          | 17 -> Ok Y2024.Day_17.solve
+          | 18 -> Ok Y2024.Day_18.solve
+          | 19 -> Ok Y2024.Day_19.solve
+          | 20 -> Ok Y2024.Day_20.solve
+          | 21 -> Ok Y2024.Day_21.solve
+          | 22 -> Ok Y2024.Day_22.solve
+          | 23 -> Ok Y2024.Day_23.solve
+          | _ ->
+              Error
+                (Printf.sprintf "Solution not found for year %d day %d" year day)
+          )
+      | 2025 -> (
+          match day with
+          | 1 -> Ok Y2025.Day_01.solve
           | _ ->
               Error
                 (Printf.sprintf "Solution not found for year %d day %d" year day)
