@@ -41,16 +41,16 @@ let get_solution ~year ~day =
           | 1 -> Ok Y2025.Day_01.solve
           | 2 -> Ok Y2025.Day_02.solve
           | 3 -> Ok Y2025.Day_03.solve
-          (* | 3 -> Ok Y2025.Day_03.solve
-             | 4 -> Ok Y2025.Day_04.solve
-             | 5 -> Ok Y2025.Day_05.solve
-             | 6 -> Ok Y2025.Day_06.solve
-             | 7 -> Ok Y2025.Day_07.solve
-             | 8 -> Ok Y2025.Day_08.solve
-             | 9 -> Ok Y2025.Day_09.solve
-             | 10 -> Ok Y2025.Day_10.solve
-             | 11 -> Ok Y2025.Day_11.solve
-             | 12 -> Ok Y2025.Day_12.solve *)
+          | 4 ->
+              Ok Y2025.Day_04.solve
+              (* | 5 -> Ok Y2025.Day_05.solve
+                 | 6 -> Ok Y2025.Day_06.solve
+                 | 7 -> Ok Y2025.Day_07.solve
+                 | 8 -> Ok Y2025.Day_08.solve
+                 | 9 -> Ok Y2025.Day_09.solve
+                 | 10 -> Ok Y2025.Day_10.solve
+                 | 11 -> Ok Y2025.Day_11.solve
+                 | 12 -> Ok Y2025.Day_12.solve *)
           | _ ->
               Error
                 (Printf.sprintf "Solution not found for year %d day %d" year day)
