@@ -40,6 +40,7 @@ let get_solution ~year ~day =
           match day with
           | 1 -> Ok Y2025.Day_01.solve
           | 2 -> Ok Y2025.Day_02.solve
+          | 3 -> Ok Y2025.Day_03.solve
           (* | 3 -> Ok Y2025.Day_03.solve
              | 4 -> Ok Y2025.Day_04.solve
              | 5 -> Ok Y2025.Day_05.solve
